@@ -16,18 +16,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'code' => '0',
             'data' => $notification->asArray()
         );
-    } else {
+    }
+
+    if ($id = _post('delete')) {
+        $notification = ORM::forTable('notification')->findOne($id);
+        if ($notification) {
+            $notification->is_delete = 1;
+            $notification->save();
+            $ret = array('code' => 0);
+        } else {
+            $ret = array(
+                'code' => 1,
+                'msg' => "no notification $id",
+            );
+        }
+    }
+
+    if (!isset($ret)) {
         $ret = array(
             'code' => 1,
-            'msg' => 'no text',
+            'msg' => "delete ? or add text?",
         );
     }
 } else {
-    $notification = ORM::forTable('notification')->orderByDesc('id')->findOne();
-    if ($notification) {
+    $notifications = ORM::forTable('notification')
+        ->where('is_delete', 0)
+        ->orderByDesc('id')
+        ->findArray();
+    if ($notifications) {
         $ret = array(
             'code' => 0,
-            'data' => $notification->asArray(),
+            'data' => $notifications,
         );
     } else {
         $ret = array(

@@ -15,6 +15,15 @@
   <h2>get notification</h2>
   <a href="notification.php?__DEBUG__">get notification</a>
 
+  <h2>delete notification</h2>
+  <form method="post" action="notification.php">
+    <label>delete</label>
+    <input name="delete">
+    <br>
+    <input type="hidden" name="__DEBUG__" value="1">
+    <input type="submit" value="post">
+  </form>
+
   <h2>post action</h2>
   <form method="post" action="action.php">
     <label>name</label>
